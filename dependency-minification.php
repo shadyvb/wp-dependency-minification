@@ -154,7 +154,7 @@ class Dependency_Minification {
 			?>
 			<div class="error">
 				<p><?php
-				echo sprintf( 
+				echo sprintf(
 					'<strong>%1$s</strong>: %2$s',
 					__( 'Dependency Minification', 'depmin' ),
 					sprintf(
@@ -678,6 +678,10 @@ class Dependency_Minification {
 	 * @return bool
 	 */
 	static function is_self_hosted_src( $src ) {
+		// Temporarily add a protocol to avoid parse_url issue with schemeless urls
+		if ( strpos( $src, '//' ) === 0 ) {
+			$src .= 'http:';
+		}
 		$parsed_url = parse_url( $src );
 		return (
 			(
@@ -791,7 +795,7 @@ class Dependency_Minification {
 			// Get the contents of each script
 			$contents_for_each_dep = array();
 			foreach ( $srcs as $src ) {
-				$has_host = (bool) parse_url( $src, PHP_URL_HOST );
+				$has_host = ( (bool) parse_url( $src, PHP_URL_HOST ) || strpos( $src, '//' ) === 0 );
 				if ( ! $has_host ) {
 					$src = 'http://' . $host_domain . $src;
 				}
