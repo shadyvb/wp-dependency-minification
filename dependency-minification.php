@@ -680,7 +680,7 @@ class Dependency_Minification {
 	static function is_self_hosted_src( $src ) {
 		// Temporarily add a protocol to avoid parse_url issue with schemeless urls
 		if ( strpos( $src, '//' ) === 0 ) {
-			$src .= 'http:';
+			$src = 'http:' . $src;
 		}
 		$parsed_url = parse_url( $src );
 		return (
